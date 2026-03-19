@@ -1,0 +1,506 @@
+<div class="acc-page" [class.sidebar-collapsed]="sidebarCollapsed">
+
+  <!-- ══════════ SIDEBAR ══════════ -->
+  <aside class="acc-sidebar">
+
+    <!-- Hamburger toggle -->
+    <button class="acc-hamburger" (click)="toggleSidebar()" title="Toggle sidebar">
+      <span></span><span></span><span></span>
+    </button>
+
+    <!-- Avatar block -->
+    <div class="acc-avatar-block">
+      <div class="acc-avatar-wrap">
+        <div class="avatar-glow-ring"></div>
+        <img *ngIf="avatarPreview" [src]="avatarPreview" class="acc-avatar-img" alt="avatar">
+        <div *ngIf="!avatarPreview" class="acc-avatar-placeholder">{{ getInitials() }}</div>
+        <label class="acc-avatar-overlay" title="Change photo">
+          <input type="file" accept="image/*" (change)="onAvatarChange($event)" style="display:none">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+        </label>
+        <div class="acc-avatar-spinner" *ngIf="avatarUploading">
+          <div class="spin-ring"></div>
+        </div>
+      </div>
+      <p class="avatar-err" *ngIf="avatarErr">{{ avatarErr }}</p>
+      <div class="acc-user-name">{{ user?.username || 'User' }}</div>
+      <div class="acc-user-email">{{ user?.email }}</div>
+      <span class="acc-role-badge admin" *ngIf="user?.role === 'admin'">
+        <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Admin
+      </span>
+    </div>
+
+    <!-- Nav -->
+    <nav class="acc-nav">
+      <button class="acc-nav-btn" [class.active]="activeTab==='profile'" (click)="setTab('profile')">
+        <span class="nav-icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </span>
+        <span class="nav-label">My Profile</span>
+        <span class="nav-chevron">›</span>
+      </button>
+      <button class="acc-nav-btn" [class.active]="activeTab==='orders'" (click)="setTab('orders')">
+        <span class="nav-icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+        </span>
+        <span class="nav-label">My Orders</span>
+        <span class="nav-badge" *ngIf="orders.length">{{ orders.length }}</span>
+        <span class="nav-chevron">›</span>
+      </button>
+      <button class="acc-nav-btn" [class.active]="activeTab==='password'" (click)="setTab('password')">
+        <span class="nav-icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </span>
+        <span class="nav-label">Security</span>
+        <span class="nav-chevron">›</span>
+      </button>
+    </nav>
+
+    <div style="height:1px; background:var(--border); margin: 0.75rem 1rem;"></div>
+
+    <button class="acc-logout" (click)="confirmLogout()">
+      <svg class="logout-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+        <polyline points="16 17 21 12 16 7"/>
+        <line x1="21" y1="12" x2="9" y2="12"/>
+      </svg>
+      <span class="acc-logout-text">Sign Out</span>
+    </button>
+  </aside>
+
+  <!-- ══════════ MAIN ══════════ -->
+  <main class="acc-main">
+
+    <!-- ═══ PROFILE TAB ═══ -->
+    <div class="acc-panel" *ngIf="activeTab==='profile'">
+      <div class="panel-head">
+        <div>
+          <h2>My Profile</h2>
+          <p>Manage your personal information and address</p>
+        </div>
+      </div>
+
+      <div class="acc-alert ok"  *ngIf="profileMsg"><svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>{{ profileMsg }}</div>
+      <div class="acc-alert err" *ngIf="profileErr"><svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>{{ profileErr }}</div>
+
+      <div class="profile-layout">
+
+        <!-- Left: avatar -->
+        <div class="profile-avatar-col">
+          <div class="big-avatar-wrap">
+            <div class="big-avatar-glow"></div>
+            <img *ngIf="avatarPreview" [src]="avatarPreview" class="big-avatar-img" alt="avatar">
+            <div *ngIf="!avatarPreview" class="big-avatar-init">{{ getInitials() }}</div>
+            <label class="big-avatar-overlay">
+              <input type="file" accept="image/*" (change)="onAvatarChange($event)" style="display:none">
+              <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                <circle cx="12" cy="13" r="4"/>
+              </svg>
+              <span>Change Photo</span>
+            </label>
+          </div>
+
+          <!-- Quick stats -->
+          <div class="quick-stats">
+            <div class="qs-item">
+              <div class="qs-val">{{ orders.length }}</div>
+              <div class="qs-lbl">Orders</div>
+            </div>
+            <div class="qs-divider"></div>
+            <div class="qs-item">
+              <div class="qs-val">{{ countByTab('delivered') }}</div>
+              <div class="qs-lbl">Delivered</div>
+            </div>
+            <div class="qs-divider"></div>
+            <div class="qs-item">
+              <div class="qs-val">{{ countByTab('cancelled') }}</div>
+              <div class="qs-lbl">Cancelled</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: form -->
+        <div class="profile-form-col">
+          <div class="acc-form">
+
+            <div class="form-section-title">
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Personal Information
+            </div>
+
+            <div class="form-row-2">
+              <div class="acc-field">
+                <label>Username <span class="req">*</span></label>
+                <div class="input-icon-wrap">
+                  <svg class="fi" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <input type="text" [(ngModel)]="editUsername" placeholder="Your display name">
+                </div>
+              </div>
+              <div class="acc-field">
+                <label>Email</label>
+                <div class="input-icon-wrap">
+                  <svg class="fi" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  <input type="email" [value]="user?.email || ''" disabled class="f-disabled">
+                </div>
+                <span class="f-hint">Email cannot be changed</span>
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="acc-field">
+                <label>Phone Number</label>
+                <div class="input-icon-wrap">
+                  <svg class="fi" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.02 2.2 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+                  <input type="tel" [(ngModel)]="editPhone" placeholder="+84 000 000 000">
+                </div>
+              </div>
+              <div class="acc-field">
+                <label>Date of Birth</label>
+                <div class="input-icon-wrap">
+                  <svg class="fi" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+                  <input type="date" [(ngModel)]="editDob">
+                </div>
+              </div>
+            </div>
+
+            <div class="acc-field">
+              <label>Gender</label>
+              <div class="gender-pills">
+                <label class="gender-pill" [class.sel]="editGender==='male'">
+                  <input type="radio" [(ngModel)]="editGender" name="gender" value="male" hidden> ♂ Male
+                </label>
+                <label class="gender-pill" [class.sel]="editGender==='female'">
+                  <input type="radio" [(ngModel)]="editGender" name="gender" value="female" hidden> ♀ Female
+                </label>
+                <label class="gender-pill" [class.sel]="editGender==='other'">
+                  <input type="radio" [(ngModel)]="editGender" name="gender" value="other" hidden> ⚧ Other
+                </label>
+              </div>
+            </div>
+
+            <!-- Address Section -->
+            <div class="form-section-title" style="margin-top:1.5rem">
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Shipping Address
+            </div>
+
+            <div class="acc-field">
+              <label>Street Address</label>
+              <div class="input-icon-wrap">
+                <svg class="fi" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <input type="text" [(ngModel)]="editStreet" placeholder="123 Street name">
+              </div>
+            </div>
+
+            <div class="form-row-3">
+              <div class="acc-field">
+                <label>City</label>
+                <input type="text" [(ngModel)]="editCity" placeholder="Ho Chi Minh City">
+              </div>
+              <div class="acc-field">
+                <label>State</label>
+                <input type="text" [(ngModel)]="editState" placeholder="HCM">
+              </div>
+              <div class="acc-field">
+                <label>ZIP</label>
+                <input type="text" [(ngModel)]="editZip" placeholder="70000">
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn-save" (click)="saveProfile()" [disabled]="profileLoading">
+                <span *ngIf="!profileLoading">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                  Save Changes
+                </span>
+                <span *ngIf="profileLoading" class="btn-spinning">
+                  <span class="spin-ring sm"></span>Saving...
+                </span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ORDERS TAB ═══ -->
+    <div class="acc-panel" *ngIf="activeTab==='orders'">
+      <div class="panel-head">
+        <div><h2>My Orders</h2><p>Track and manage your purchases</p></div>
+      </div>
+
+      <!-- Order status tabs -->
+      <div class="order-tabs-wrap">
+        <button
+          *ngFor="let t of ORDER_TABS"
+          class="order-tab-btn"
+          [class.active]="activeOrderTab === t.key"
+          (click)="setOrderTab(t.key)">
+          {{ t.label }}
+          <span class="otab-count" *ngIf="countByTab(t.key) > 0">{{ countByTab(t.key) }}</span>
+        </button>
+      </div>
+
+      <!-- Loading -->
+      <div class="orders-loading" *ngIf="ordersLoading">
+        <div class="spin-ring lg"></div><span>Loading orders...</span>
+      </div>
+
+      <!-- Empty state -->
+      <div class="orders-empty" *ngIf="!ordersLoading && filteredOrders.length === 0">
+        <div class="empty-icon">
+          <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.2">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+        </div>
+        <p>No orders found in this category</p>
+        <button class="btn-shop" routerLink="/shop">Shop Now →</button>
+      </div>
+
+      <!-- Order cards -->
+      <div class="orders-list" *ngIf="!ordersLoading && filteredOrders.length > 0">
+        <div class="order-card" *ngFor="let order of filteredOrders">
+
+          <div class="oc-head">
+            <div class="oc-id-wrap">
+              <span class="oc-id-lbl">Order</span>
+              <span class="oc-id">#{{ order._id.slice(-8).toUpperCase() }}</span>
+            </div>
+            <div class="oc-meta-right">
+              <div class="oc-date">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                {{ formatDate(order.createdAt) }}
+              </div>
+              <span class="oc-status" [class]="getStatusClass(order.status)">{{ getStatusLabel(order.status) }}</span>
+            </div>
+          </div>
+
+          <div class="oc-items">
+            <div class="oc-item" *ngFor="let item of order.items">
+              <img [src]="item.image || 'https://placehold.co/52x52/1e293b/f97316?text=👟'" [alt]="item.name" class="oc-img">
+              <div class="oc-item-info">
+                <div class="oc-item-name">{{ item.name }}</div>
+                <div class="oc-item-qty">Qty: {{ item.quantity }}</div>
+              </div>
+              <div class="oc-item-price">{{ formatPrice(item.price * item.quantity) }}</div>
+            </div>
+          </div>
+
+          <div class="oc-foot">
+            <div class="oc-actions">
+              <button class="oc-btn btn-cancel" *ngIf="canCancel(order.status)" (click)="cancelOrder(order)">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Cancel
+              </button>
+              <button class="oc-btn btn-return" *ngIf="canReturn(order.status)" (click)="returnOrder(order)">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+                Return
+              </button>
+              <ng-container *ngIf="canReview(order.status)">
+                <button class="oc-btn btn-review" *ngFor="let item of order.items" (click)="openReview(order, item)">
+                  <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  Review · {{ item.name }}
+                </button>
+              </ng-container>
+            </div>
+            <div class="oc-total-wrap">
+              <span class="oc-total-lbl">Total</span>
+              <span class="oc-total">{{ formatPrice(order.totalAmount) }}</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ REVIEW MODAL ═══ -->
+    <div class="review-backdrop" *ngIf="reviewModal.open" (click)="closeReview()">
+      <div class="review-modal" (click)="$event.stopPropagation()">
+        <button class="rm-close" (click)="closeReview()">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <div class="rm-head">
+          <img [src]="reviewModal.item?.image || 'https://placehold.co/56x56/1e293b/f97316?text=👟'" class="rm-img" [alt]="reviewModal.item?.name">
+          <div>
+            <div class="rm-product-name">{{ reviewModal.item?.name }}</div>
+            <div class="rm-order-id">Order #{{ reviewModal.order?._id?.slice(-8)?.toUpperCase() }}</div>
+          </div>
+        </div>
+        <div class="rm-stars-label">Your Rating <span class="req">*</span></div>
+        <div class="rm-stars">
+          <button *ngFor="let s of [1,2,3,4,5]" class="rm-star" [class.filled]="s <= reviewModal.rating" (click)="setReviewRating(s)">★</button>
+          <span class="rm-rating-text">
+            {{ reviewModal.rating === 1 ? 'Poor' : reviewModal.rating === 2 ? 'Fair' : reviewModal.rating === 3 ? 'Good' : reviewModal.rating === 4 ? 'Very Good' : 'Excellent' }}
+          </span>
+        </div>
+        <div class="acc-field" style="margin-top:1rem">
+          <label>Your Comment <span style="color:#94a3b8;font-weight:400">(optional)</span></label>
+          <textarea [(ngModel)]="reviewModal.comment" rows="4" maxlength="500"
+            placeholder="Share your experience with this product..." style="resize:vertical"></textarea>
+          <span class="f-hint" style="text-align:right;display:block">{{ reviewModal.comment.length }}/500</span>
+        </div>
+        <div class="acc-alert ok"  *ngIf="reviewModal.msg"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>{{ reviewModal.msg }}</div>
+        <div class="acc-alert err" *ngIf="reviewModal.err"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>{{ reviewModal.err }}</div>
+        <button class="btn-save full" (click)="submitReview()" [disabled]="reviewModal.loading">
+          <span *ngIf="!reviewModal.loading">Submit Review</span>
+          <span *ngIf="reviewModal.loading" class="btn-spinning"><span class="spin-ring sm"></span>Submitting...</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ═══ PASSWORD TAB ═══ -->
+    <div class="acc-panel" *ngIf="activeTab==='password'">
+      <div class="panel-head">
+        <div><h2>Security Settings</h2><p>Keep your account safe with a strong password</p></div>
+      </div>
+
+      <div class="acc-alert ok"  *ngIf="passwordMsg"><svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>{{ passwordMsg }}</div>
+      <div class="acc-alert err" *ngIf="passwordErr"><svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>{{ passwordErr }}</div>
+
+      <div class="pw-layout">
+        <div class="pw-form-col">
+          <div class="acc-form">
+
+            <div class="acc-field">
+              <label>Current Password <span class="req">*</span></label>
+              <div class="pw-wrap">
+                <svg class="pw-icon" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <input [type]="showOldPw?'text':'password'" [(ngModel)]="oldPassword" placeholder="Enter current password">
+                <button class="pw-eye" type="button" (click)="showOldPw=!showOldPw">
+                  <svg *ngIf="!showOldPw" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg *ngIf="showOldPw" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="acc-field">
+              <label>New Password <span class="req">*</span></label>
+              <div class="pw-wrap">
+                <svg class="pw-icon" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <input [type]="showNewPw?'text':'password'" [(ngModel)]="newPassword" placeholder="At least 6 characters">
+                <button class="pw-eye" type="button" (click)="showNewPw=!showNewPw">
+                  <svg *ngIf="!showNewPw" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg *ngIf="showNewPw" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+              </div>
+              <div class="pw-strength" *ngIf="newPassword">
+                <div class="pw-bar">
+                  <div class="pw-fill" [class]="getPwStrength()"
+                    [style.width]="getPwStrength()==='weak'?'33%':getPwStrength()==='medium'?'66%':'100%'"></div>
+                </div>
+                <span class="pw-lbl" [class]="getPwStrength()">{{ getPwStrength() | titlecase }}</span>
+              </div>
+            </div>
+
+            <div class="acc-field">
+              <label>Confirm New Password <span class="req">*</span></label>
+              <div class="pw-wrap">
+                <svg class="pw-icon" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <input type="password" [(ngModel)]="confirmPassword" placeholder="Re-enter new password">
+              </div>
+              <span class="match-ok"  *ngIf="confirmPassword && confirmPassword===newPassword">✓ Passwords match</span>
+              <span class="match-err" *ngIf="confirmPassword && confirmPassword!==newPassword">✗ Passwords do not match</span>
+            </div>
+
+            <button class="btn-save" (click)="changePassword()" [disabled]="passwordLoading">
+              <span *ngIf="!passwordLoading">
+                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Update Password
+              </span>
+              <span *ngIf="passwordLoading" class="btn-spinning"><span class="spin-ring sm"></span>Updating...</span>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- Right: tips -->
+        <div class="pw-tips-col">
+          <div class="pw-tips-card">
+            <div class="tips-title">
+              <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Password Tips
+            </div>
+            <ul class="tips-list">
+              <li><span class="tip-check" [class.done]="newPassword.length >= 8">✓</span> At least 8 characters</li>
+              <li><span class="tip-check" [class.done]="/[A-Z]/.test(newPassword)">✓</span> One uppercase letter</li>
+              <li><span class="tip-check" [class.done]="/[0-9]/.test(newPassword)">✓</span> One number</li>
+              <li><span class="tip-check" [class.done]="/[^A-Za-z0-9]/.test(newPassword)">✓</span> One special character</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ══════════ SIGN OUT CONFIRM ══════════ -->
+  <div class="signout-backdrop" *ngIf="showSignOutConfirm" (click)="showSignOutConfirm=false">
+    <div class="signout-dialog" (click)="$event.stopPropagation()">
+      <div class="signout-icon">
+        <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+      </div>
+      <h3>Sign Out?</h3>
+      <p>Are you sure you want to sign out?</p>
+      <div class="signout-actions">
+        <button class="signout-cancel" (click)="showSignOutConfirm=false">Cancel</button>
+        <button class="signout-confirm" (click)="logout()">Sign Out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ ORDER CONFIRM DIALOG ══════════ -->
+  <div class="signout-backdrop" *ngIf="confirmDialog.open" (click)="closeConfirm()">
+    <div class="signout-dialog order-confirm-dialog" (click)="$event.stopPropagation()">
+
+      <!-- Cancel icon -->
+      <div class="signout-icon" *ngIf="confirmDialog.icon === 'cancel'"
+           style="background: rgba(239,68,68,0.08); color: #ef4444">
+        <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="15" y1="9" x2="9" y2="15"/>
+          <line x1="9" y1="9" x2="15" y2="15"/>
+        </svg>
+      </div>
+
+      <!-- Return icon -->
+      <div class="signout-icon" *ngIf="confirmDialog.icon === 'return'"
+           style="background: rgba(59,130,246,0.08); color: #3b82f6">
+        <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+          <polyline points="1 4 1 10 7 10"/>
+          <path d="M3.51 15a9 9 0 1 0 .49-3.67"/>
+        </svg>
+      </div>
+
+      <h3>{{ confirmDialog.title }}</h3>
+      <p>{{ confirmDialog.message }}</p>
+
+      <div class="signout-actions">
+        <button class="signout-cancel" (click)="closeConfirm()">Back</button>
+        <button class="order-confirm-btn" [style.background]="confirmDialog.confirmColor" (click)="doConfirm()">
+          {{ confirmDialog.confirmLabel }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

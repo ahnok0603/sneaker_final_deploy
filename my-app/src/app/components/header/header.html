@@ -1,0 +1,58 @@
+<header class="header">
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo" routerLink="/shop">SNEAKER</div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+      <a routerLink="/homepage" routerLinkActive="active" class="nav-link">Home</a>
+      <a routerLink="/shop" routerLinkActive="active" class="nav-link">Shop</a>
+      <a routerLink="/about" routerLinkActive="active" class="nav-link">About</a>
+      <a routerLink="/contact" routerLinkActive="active" class="nav-link">Contact</a>
+    </nav>
+
+    <!-- Header Actions -->
+    <div class="header-actions">
+
+      <!-- Search -->
+      <div class="search-wrapper" [class.open]="searchOpen">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search sneakers..."
+          [(ngModel)]="searchQuery"
+          (keyup.enter)="submitSearch()"
+          (keyup.escape)="closeSearch()"
+        />
+        <button class="icon-btn search-btn" data-tip="Search" (click)="toggleSearch()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Cart -->
+      <button class="icon-btn cart-btn" data-tip="Cart" routerLink="/cart">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <span class="badge" *ngIf="cartItemCount > 0" style="pointer-events: none;">{{ cartItemCount }}</span>
+      </button>
+
+      <!-- Account: luôn hiện icon người -->
+      <button class="icon-btn user-btn"
+              [attr.data-tip]="isLoggedIn ? 'My Account' : 'Login'"
+              (click)="goToAccount()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </button>
+
+    </div>
+  </div>
+</header>

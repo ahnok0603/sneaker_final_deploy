@@ -1,0 +1,573 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+/* ===== CSS VARIABLES ===== */
+:host {
+  --orange: #f97316;
+  --red: #ef4444;
+  --coral: #fb923c;
+  --yellow: #fbbf24;
+  --teal: #14b8a6;
+  --blue: #3b82f6;
+  --dark: #0f172a;
+  --mid: #1e293b;
+  --gray: #64748b;
+  --light: #f8fafc;
+  --gradient: linear-gradient(135deg, var(--orange), var(--red));
+  --gradient-cool: linear-gradient(135deg, var(--teal), var(--blue));
+  font-family: 'DM Sans', sans-serif;
+  display: block;
+}
+
+/* ===== HERO ===== */
+.contact-hero {
+  position: relative;
+  min-height: 270px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--dark);
+}
+
+/* Animated gradient blobs behind */
+.contact-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 70% at 20% 50%, rgba(249,115,22,0.35) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 80% 30%, rgba(239,68,68,0.3) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 50% at 60% 80%, rgba(20,184,166,0.2) 0%, transparent 70%);
+  animation: blobShift 8s ease-in-out infinite alternate;
+}
+
+@keyframes blobShift {
+  0%   { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.08) translate(2%, -2%); }
+}
+
+/* Diagonal stripe overlay */
+.contact-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -55deg,
+    transparent,
+    transparent 40px,
+    rgba(255,255,255,0.018) 40px,
+    rgba(255,255,255,0.018) 80px
+  );
+}
+
+.hero-inner h1,
+.hero-inner p {
+  font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem,7vw,5.5rem); font-weight: 400; letter-spacing: 8px; margin-bottom: 0.75rem; line-height: 1;
+  margin: 30px 0 0 0 ;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0rem 0rem;
+  max-width: 600px;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--orange), var(--red));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  animation: fadeDown 0.6s ease both;
+}
+
+.page-title-hero {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 6rem;
+  letter-spacing: 7px;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 0rem;
+  animation: fadeDown 0.7s ease 0.1s both;
+}
+
+.page-title-hero span {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== STATS STRIP ===== */
+.stats-strip {
+  background: var(--gradient);
+  padding: 1.6rem 0rem;
+  display: flex;
+  justify-content: center;
+  gap: 0;
+}
+
+.stat-item {
+  text-align: center;
+  color: #fff;
+  padding: 0 5rem;
+  border-right: 1px solid rgba(255,255,255,0.25);
+}
+
+.stat-item:last-child { border-right: none; }
+
+.stat-number {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.4rem;
+  line-height: 1;
+  letter-spacing: 1px;
+}
+
+.stat-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-top: 0.2rem;
+}
+
+/* ===== MAIN SECTION ===== */
+.contact-section {
+  padding: 5rem 2rem 6rem;
+  background: #f1f5f9;
+  position: relative;
+}
+
+/* Decorative top shape */
+.contact-section::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0; right: 0;
+  height: 60px;
+  background: var(--gradient);
+  clip-path: polygon(0 0, 100% 0, 100% 30%, 50% 100%, 0 30%);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.55fr;
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===== INFO CARD ===== */
+.contact-info-card {
+  background: var(--dark);
+  padding: 2.8rem;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+}
+
+/* Glowing orb */
+.contact-info-card::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 220px; height: 220px;
+  background: radial-gradient(circle, rgba(249,115,22,0.35) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.contact-info-card::after {
+  content: '';
+  position: absolute;
+  bottom: -40px; left: -40px;
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(20,184,166,0.25) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.contact-section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.4rem;
+  letter-spacing: 2px;
+  margin-bottom: 0.6rem;
+  color: #fff;
+  position: relative;
+}
+
+.contact-section-title.dark { color: var(--dark); }
+
+.title-underline {
+  width: 48px;
+  height: 4px;
+  background: var(--gradient);
+  border-radius: 2px;
+  margin-bottom: 1.2rem;
+}
+
+.contact-description {
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 2.2rem;
+  line-height: 1.7;
+  font-size: 0.92rem;
+}
+
+.contact-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  margin-bottom: 2.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.contact-info-item {
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+}
+
+.contact-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-icon.orange { background: linear-gradient(135deg, #f97316, #fb923c); }
+.contact-icon.red    { background: linear-gradient(135deg, #ef4444, #f97316); }
+.contact-icon.teal   { background: linear-gradient(135deg, #14b8a6, #3b82f6); }
+
+.contact-info-content h3 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 0.4rem;
+}
+
+.contact-info-content p {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.contact-info-content a {
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.contact-info-content a:hover { color: var(--orange); }
+
+/* Social */
+.contact-social { position: relative; z-index: 1; }
+
+.contact-social h3 {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 1rem;
+}
+
+.social-links-contact {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.social-btn-contact {
+  width: 42px;
+  height: 42px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  transition: all 0.25s;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.social-btn-contact:hover {
+  background: var(--gradient);
+  color: #fff;
+  border-color: transparent;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(249,115,22,0.4);
+}
+
+/* ===== FORM CARD ===== */
+.contact-form-card {
+  background: #fff;
+  padding: 2.8rem;
+  border-radius: 24px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Colourful top border */
+.contact-form-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--orange), var(--red), var(--teal), var(--blue));
+  background-size: 300% 100%;
+  animation: gradientSlide 4s linear infinite;
+}
+
+@keyframes gradientSlide {
+  0%   { background-position: 0% 0; }
+  100% { background-position: 300% 0; }
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+  margin-top: 0.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.3rem;
+}
+
+.form-group { display: flex; flex-direction: column; gap: 0.45rem; }
+
+.form-group label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--dark);
+  background: #fafafa;
+  transition: all 0.25s;
+  outline: none;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: var(--orange);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(249,115,22,0.1);
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: #cbd5e1;
+  font-weight: 300;
+}
+
+.contact-form textarea {
+  resize: vertical;
+  min-height: 130px;
+}
+
+/* Submit button */
+.btn-primary {
+  background: var(--gradient);
+  color: #fff;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(249,115,22,0.45);
+}
+
+.btn-primary:hover::before { opacity: 1; }
+
+.btn-primary:active { transform: translateY(-1px); }
+
+.btn-block { width: 100%; }
+
+/* ===== MAP ===== */
+.map-section {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  overflow: hidden;
+}
+
+.map-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  background: var(--gradient);
+  z-index: 2;
+}
+
+.map-section iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  filter: saturate(0.85) contrast(1.05);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .contact-grid { grid-template-columns: 1fr; }
+  .page-title-hero { font-size: 4.5rem; }
+}
+
+@media (max-width: 768px) {
+  .form-row { grid-template-columns: 1fr; }
+  .page-title-hero { font-size: 3.5rem; }
+  .stats-strip { flex-wrap: wrap; gap: 1rem; }
+  .stat-item { border-right: none; padding: 0.5rem 1.5rem; }
+  .contact-info-card,
+  .contact-form-card { padding: 2rem; }
+}
+
+@media (max-width: 480px) {
+  .page-title-hero { font-size: 2.8rem; }
+  .contact-section { padding: 4rem 1rem 5rem; }
+}
+/* ── THEME OVERRIDES — match header #0f1923 ── */
+
+
+:host { --dark: #0f1923; }
+
+.contact-hero { background: #0f1923; }
+
+.page-title-hero {
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+.contact-section-title {
+  font-family: 'Bebas Neue', sans-serif !important;
+  letter-spacing: 3px !important;
+}
+.contact-section-title.dark { color: #0f1923 !important; }
+
+.contact-info-card { background: #0f1923; }
+
+.hero-badge {
+  font-family: 'DM Sans', sans-serif;
+}
+
+.contact-form input,
+.contact-form textarea,
+.form-group label,
+.page-subtitle,
+.contact-description,
+.contact-info-content p,
+.contact-info-content a,
+.contact-info-content h3 {
+  font-family: 'DM Sans', sans-serif !important;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #f97316;
+  box-shadow: 0 0 0 4px rgba(249,115,22,0.1);
+}
+/* ===== ALERT MESSAGES ===== */
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 1.2rem;
+  animation: fadeDown 0.4s ease both;
+}
+
+.alert-success {
+  background: #f0fdf4;
+  border: 1.5px solid #86efac;
+  color: #166534;
+}
+
+.alert-success svg { color: #16a34a; flex-shrink: 0; }
+
+.alert-error {
+  background: #fff1f2;
+  border: 1.5px solid #fca5a5;
+  color: #991b1b;
+}
+
+.alert-error svg { color: #dc2626; flex-shrink: 0; }
+
+/* ===== SPINNER ===== */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spin { animation: spin 0.8s linear infinite; }
+
+/* ===== DISABLED BUTTON ===== */
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

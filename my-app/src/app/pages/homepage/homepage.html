@@ -1,0 +1,225 @@
+<!-- Hero Section -->
+<section class="hero">
+  <img class="hero-banner-img" src="/hero-banner.png" alt="Sneaker Banner">
+  <div class="hero-bottom-strip">
+    <div class="hbs-left">
+      <button class="btn-primary" [routerLink]="['/shop']">
+        SHOP NOW
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+    </div>
+    <div class="hbs-center">
+      <p class="hbs-tagline">UNLEASH THE BEAST</p>
+    </div>
+    <div class="hbs-right">
+      <div class="hbs-stat">
+        <span class="hbs-num">500<sup>+</sup></span>
+        <span class="hbs-lbl">MODELS</span>
+      </div>
+      <div class="hbs-divider"></div>
+      <div class="hbs-stat">
+        <span class="hbs-num">3K<sup>+</sup></span>
+        <span class="hbs-lbl">CUSTOMERS</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Latest Products Section -->
+<section class="lastest-section">
+  <div class="container">
+    <h2 class="lastestsection-title">Latest Products</h2>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isLoadingLatest">
+      <div class="products-grid">
+        <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5,6,7,8]">
+          <div class="skeleton-image"></div>
+          <div class="skeleton-content">
+            <div class="skeleton-line short"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line medium"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-state" *ngIf="!isLoadingLatest && errorLatest">
+      <div class="error-message">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <p>{{ errorLatest }}</p>
+        <button class="btn-retry" (click)="retryLoadProducts()">Try Again</button>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="products-grid" *ngIf="!isLoadingLatest && !errorLatest && lastestProducts.length > 0">
+      <div class="product-card" *ngFor="let product of lastestProducts">
+
+        <!-- Discount Badge -->
+        <div class="discount-badge" *ngIf="product.discount && product.discount > 0">
+          -{{ product.discount }}%
+        </div>
+
+        <!-- Image -->
+        <a [routerLink]="['/product', product._id]" class="product-image-link">
+          <div class="product-image">
+            <img [src]="product.image || 'https://via.placeholder.com/400'" [alt]="product.name">
+          </div>
+        </a>
+
+        <!-- Info -->
+        <div class="product-info">
+          <div class="brand">{{ product.brand }}</div>
+          <a [routerLink]="['/product', product._id]" class="product-name-link">
+            <h3 class="product-name">{{ product.name }}</h3>
+          </a>
+          <div class="rating">
+            <div class="stars">
+              <ng-container *ngFor="let star of generateStarRating(product.rating)">
+                <span>{{ getStarChar(star) }}</span>
+              </ng-container>
+            </div>
+            <span class="rating-text">{{ product.rating }} ({{ product.reviewCount }})</span>
+          </div>
+          <div class="price-row">
+            <span class="current-price">{{ formatPrice(product.price) }}</span>
+            <span class="old-price" *ngIf="product.oldPrice && product.oldPrice > product.price">
+              {{ formatPrice(product.oldPrice) }}
+            </span>
+          </div>
+        </div>
+
+        <button class="add-to-cart-btn" (click)="quickAddToCart(product._id)">
+          Add to Cart
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!isLoadingLatest && !errorLatest && lastestProducts.length === 0">
+      <p>No products available at the moment.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Video Section -->
+<section class="video-section">
+  <div class="container">
+    <div class="video-header">
+      <h2 class="video-title">Experience The Movement</h2>
+      <p class="video-subtitle">Watch our latest collection in action</p>
+    </div>
+  </div>
+  <div class="video-box">
+    <video src="/video/video.mp4" autoplay muted loop playsinline (error)="onVideoError($event)">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</section>
+
+<!-- Featured Products Section -->
+<section class="featured-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-header-content">
+        <h2 class="section-title">Featured Products</h2>
+        <p class="section-description">
+          Handpicked selection of our most popular and highly-rated sneakers. These bestsellers combine
+          style, comfort, and performance to elevate your footwear game.
+        </p>
+      </div>
+      <button class="btn-secondary" [routerLink]="['/shop']">
+        View All
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 8px;">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isLoadingFeatured">
+      <div class="products-grid">
+        <div class="skeleton-card" *ngFor="let i of [1,2,3,4]">
+          <div class="skeleton-image"></div>
+          <div class="skeleton-content">
+            <div class="skeleton-line short"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line medium"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-state" *ngIf="!isLoadingFeatured && errorFeatured">
+      <div class="error-message">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <p>{{ errorFeatured }}</p>
+        <button class="btn-retry" (click)="retryLoadProducts()">Try Again</button>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="products-grid" *ngIf="!isLoadingFeatured && !errorFeatured && featuredProducts.length > 0">
+      <div class="product-card" *ngFor="let product of featuredProducts">
+
+        <!-- Discount Badge -->
+        <div class="discount-badge" *ngIf="product.discount && product.discount > 0">
+          -{{ product.discount }}%
+        </div>
+
+        <!-- Image -->
+        <a [routerLink]="['/product', product._id]" class="product-image-link">
+          <div class="product-image">
+            <img [src]="product.image || 'https://via.placeholder.com/400'" [alt]="product.name">
+          </div>
+        </a>
+
+        <!-- Info -->
+        <div class="product-info">
+          <div class="brand">{{ product.brand }}</div>
+          <a [routerLink]="['/product', product._id]" class="product-name-link">
+            <h3 class="product-name">{{ product.name }}</h3>
+          </a>
+          <div class="rating">
+            <div class="stars">
+              <ng-container *ngFor="let star of generateStarRating(product.rating)">
+                <span>{{ getStarChar(star) }}</span>
+              </ng-container>
+            </div>
+            <span class="rating-text">{{ product.rating }} ({{ product.reviewCount }})</span>
+          </div>
+          <div class="price-row">
+            <span class="current-price">{{ formatPrice(product.price) }}</span>
+            <span class="old-price" *ngIf="product.oldPrice && product.oldPrice > product.price">
+              {{ formatPrice(product.oldPrice) }}
+            </span>
+          </div>
+        </div>
+
+        <button class="add-to-cart-btn" (click)="quickAddToCart(product._id)">
+          Add to Cart
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!isLoadingFeatured && !errorFeatured && featuredProducts.length === 0">
+      <p>No featured products available.</p>
+    </div>
+  </div>
+</section>

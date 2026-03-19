@@ -1,0 +1,127 @@
+<!-- Hero Banner - Full width -->
+<div class="hero-banner">
+  <div class="banner-slider">
+    <div *ngFor="let slide of bannerSlides; let i = index"
+         class="slide"
+         [class.active]="currentSlide === i"
+         [style.background-image]="'url(' + slide.image + ')'">
+      <div class="slide-content">
+        <h1>{{ slide.title }}</h1>
+      </div>
+    </div>
+
+    <button class="arrow arrow-left"  (click)="prevSlide()">&#8249;</button>
+    <button class="arrow arrow-right" (click)="nextSlide()">&#8250;</button>
+
+    <div class="dots">
+      <span *ngFor="let slide of bannerSlides; let i = index"
+            class="dot"
+            [class.active]="currentSlide === i"
+            (click)="goToSlide(i)"></span>
+    </div>
+  </div>
+</div>
+
+<!-- Main Container - White background -->
+<div class="container">
+  <h1>Shop All Sneakers</h1>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <input
+      type="text"
+      class="search-box"
+      placeholder="Search sneakers..."
+      [(ngModel)]="searchText"
+      (input)="searchProducts()">
+
+    <select
+      class="category-select"
+      [(ngModel)]="selectedCategory"
+      (change)="filterByCategory(selectedCategory)">
+      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+    </select>
+
+    <select
+      class="sort-select"
+      [(ngModel)]="selectedSort"
+      (change)="onSortChange()">
+      <option value="Filter">Filter</option>
+      <option value="Price: Low to High">Price: Low to High</option>
+      <option value="Price: High to Low">Price: High to Low</option>
+      <option value="Newest">Newest</option>
+    </select>
+  </div>
+
+  <!-- Loading Skeleton -->
+  <div class="skeleton-grid" *ngIf="isLoading">
+    <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5,6,7,8]">
+      <div class="skeleton-img"></div>
+      <div class="skeleton-body">
+        <div class="skeleton-line short"></div>
+        <div class="skeleton-line full"></div>
+        <div class="skeleton-line medium"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Grid -->
+  <div class="product-grid" *ngIf="!isLoading && displayedProducts.length > 0">
+    <div *ngFor="let product of displayedProducts" class="product-card">
+
+      <!-- Discount Badge -->
+      <div class="discount-badge" *ngIf="product.discount && product.discount > 0">
+        -{{ product.discount }}%
+      </div>
+
+      <!-- Product Image -->
+      <a [routerLink]="['/product', product._id]" class="product-image-link">
+        <div class="product-image">
+          <img [src]="product.image || getProductImage(product)"
+               [alt]="product.name"
+               (error)="onImageError($event)">
+        </div>
+      </a>
+
+      <!-- Product Info -->
+      <div class="product-info">
+        <div class="brand">{{ product.brand }}</div>
+
+        <a [routerLink]="['/product', product._id]" class="product-name-link">
+          <h3 class="product-name">{{ product.name }}</h3>
+        </a>
+
+        <div class="rating">
+          <div class="stars">
+            <span *ngFor="let star of getStars(product.rating)">{{ star }}</span>
+          </div>
+          <span class="rating-text">{{ product.rating }} ({{ product.reviewCount }})</span>
+        </div>
+
+        <div class="price-row">
+          <span class="current-price">{{ formatPrice(product.price) }}</span>
+          <span class="old-price" *ngIf="product.oldPrice && product.oldPrice > product.price">
+            {{ formatPrice(product.oldPrice) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- BUY button — ngoài link, click 1 lần là thêm giỏ -->
+      <button class="add-to-cart-btn" (click)="addToCart(product)">
+        Add to Cart
+      </button>
+    </div>
+  </div>
+
+  <!-- Show All Button -->
+  <div class="pagination-controls" *ngIf="!isLoading && !showingAll && filteredProducts.length > itemsPerPage">
+    <button class="btn-show-all" (click)="showAll()">
+      Show All {{ filteredProducts.length }} Products
+    </button>
+  </div>
+
+  <!-- No Results -->
+  <div class="no-results" *ngIf="!isLoading && filteredProducts.length === 0">
+    <p> No products found. Try different filters.</p>
+  </div>
+</div>

@@ -1,0 +1,297 @@
+<!-- ══════════════════════════════════════════
+     TRANG CHỜ MOMO THẬT
+══════════════════════════════════════════ -->
+<div class="momo-page" *ngIf="momoStep && !orderComplete">
+
+  <!-- Header MoMo -->
+  <div class="momo-header">
+    <div class="momo-logo">
+      <svg width="40" height="40" viewBox="0 0 40 40">
+        <rect width="40" height="40" rx="10" fill="#ae2070"/>
+        <text x="50%" y="56%" dominant-baseline="middle" text-anchor="middle"
+              fill="white" font-size="14" font-weight="800" font-family="Arial">mo</text>
+      </svg>
+      <span>Cổng thanh toán MoMo</span>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="momo-body">
+
+    <!-- LEFT: Thông tin đơn hàng -->
+    <div class="momo-info-card">
+      <h3 class="momo-info-title">Thông tin đơn hàng</h3>
+
+      <div class="momo-info-row">
+        <span class="momo-info-label">Nhà cung cấp</span>
+        <div class="momo-provider">
+          <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png"
+               onerror="this.style.display='none'" width="20" alt="MoMo">
+          <strong>MoMo Payment</strong>
+        </div>
+      </div>
+
+      <div class="momo-info-row">
+        <span class="momo-info-label">Mã đơn hàng</span>
+        <strong class="momo-order-id">
+          {{ momoOrderId.length > 20 ? (momoOrderId | slice:0:20) + '...' : momoOrderId }}
+        </strong>
+      </div>
+
+      <div class="momo-info-row">
+        <span class="momo-info-label">Mô tả</span>
+        <strong>Thanh toán đơn hàng Fashion</strong>
+      </div>
+
+      <div class="momo-info-row">
+        <span class="momo-info-label">Số tiền</span>
+        <span class="momo-amount">{{ formatPrice(momoAmount) }}</span>
+      </div>
+
+      <!-- Countdown -->
+      <div class="momo-countdown-box">
+        <p class="momo-countdown-label">Đơn hàng sẽ hết hạn sau:</p>
+        <div class="momo-countdown">
+          <div class="cd-unit">
+            <span class="cd-num">{{ countdownHours }}</span>
+            <span class="cd-label">Giờ</span>
+          </div>
+          <div class="cd-unit">
+            <span class="cd-num">{{ countdownMinutes }}</span>
+            <span class="cd-label">Phút</span>
+          </div>
+          <div class="cd-unit">
+            <span class="cd-num">{{ countdownSeconds }}</span>
+            <span class="cd-label">Giây</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="momo-back-btn" (click)="cancelMomo()">Quay về</button>
+    </div>
+
+    <!-- RIGHT: Thanh toán MoMo thật -->
+    <div class="momo-qr-card">
+
+      <!-- Tabs giả -->
+      <div class="momo-tabs">
+        <div class="momo-tab-item active-tab">
+          <span>Ví MoMo</span>
+          <svg width="28" height="16" viewBox="0 0 28 16">
+            <rect width="28" height="16" rx="4" fill="#ae2070"/>
+            <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle"
+                  fill="white" font-size="7" font-weight="800" font-family="Arial">mo mo</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Hướng dẫn thanh toán -->
+      <div class="momo-guide">
+        <div class="momo-guide-step">
+          <div class="guide-num">1</div>
+          <span>Nhấn nút <strong>"Thanh toán với MoMo"</strong> bên dưới</span>
+        </div>
+        <div class="momo-guide-step">
+          <div class="guide-num">2</div>
+          <span>Đăng nhập tài khoản MoMo và xác nhận thanh toán</span>
+        </div>
+        <div class="momo-guide-step">
+          <div class="guide-num">3</div>
+          <span>Bạn sẽ được chuyển về trang xác nhận đơn hàng</span>
+        </div>
+      </div>
+
+      <!-- Số tiền cần thanh toán -->
+      <div class="momo-total-box">
+        <span class="momo-total-label">Số tiền thanh toán</span>
+        <span class="momo-total-amount">{{ formatPrice(momoAmount) }}</span>
+      </div>
+
+      <!-- ✅ NÚT CHÍNH: Redirect sang MoMo thật -->
+      <button class="momo-confirm-btn" (click)="goToMomoPayment()" [disabled]="!momoPayUrl">
+        <svg width="20" height="20" viewBox="0 0 40 40" style="flex-shrink:0">
+          <rect width="40" height="40" rx="8" fill="white"/>
+          <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle"
+                fill="#ae2070" font-size="13" font-weight="800" font-family="Arial">mo</text>
+        </svg>
+        Thanh toán với MoMo
+      </button>
+
+      <p class="momo-help">
+        Gặp khó khăn khi thanh toán?
+        <a href="https://momo.vn/tin-tuc/huong-dan" target="_blank">Xem Hướng dẫn</a>
+      </p>
+
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     ORDER COMPLETE
+══════════════════════════════════════════ -->
+<div class="checkout-page" *ngIf="orderComplete">
+  <div class="success-container">
+    <h2>Order Placed Successfully!</h2>
+    <p>Thank you for your purchase. Your order has been confirmed.</p>
+    <button class="btn-primary" routerLink="/shop">Continue Shopping</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHECKOUT FORM
+══════════════════════════════════════════ -->
+<div class="checkout-page" *ngIf="!orderComplete && !momoStep">
+  <div class="container">
+    <h1 class="page-title">Checkout</h1>
+
+    <!-- ✅ Hiện lỗi MoMo nếu có -->
+    <div class="momo-error-banner" *ngIf="momoErrorMsg">
+      <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      {{ momoErrorMsg }}
+    </div>
+
+    <div class="checkout-grid">
+
+      <!-- LEFT: Form -->
+      <form class="checkout-form" (submit)="onPlaceOrder($event)">
+
+        <!-- Shipping -->
+        <div class="form-section">
+          <div class="form-section-header">
+            <div class="step-badge">1</div>
+            <h2>Shipping Information</h2>
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" name="email" placeholder="you@example.com" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" name="firstName" placeholder="John" required>
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" name="lastName" placeholder="Doe" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Street Address</label>
+            <input type="text" name="address" placeholder="123 Main Street" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>City</label>
+              <input type="text" name="city" placeholder="Ho Chi Minh City" required>
+            </div>
+            <div class="form-group">
+              <label>ZIP / Postal Code</label>
+              <input type="text" name="zip" placeholder="700000" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" name="phone" placeholder="+84 000 000 000" required>
+          </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="form-section">
+          <div class="form-section-header">
+            <div class="step-badge">2</div>
+            <h2>Payment Method</h2>
+          </div>
+          <div class="payment-methods">
+
+            <div class="payment-option" [class.active]="selectedPayment === 'momo'" (click)="selectPayment('momo')">
+              <div class="payment-radio"><div class="radio-dot" *ngIf="selectedPayment === 'momo'"></div></div>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ae2070" stroke-width="1.8">
+                <circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/>
+              </svg>
+              <span>MoMo</span>
+            </div>
+
+            <div class="payment-option" [class.active]="selectedPayment === 'cod'" (click)="selectPayment('cod')">
+              <div class="payment-radio"><div class="radio-dot" *ngIf="selectedPayment === 'cod'"></div></div>
+              <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                <path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+              <span>Cash on Delivery</span>
+            </div>
+
+          </div>
+        </div>
+
+        <button type="submit" class="btn-place-order"
+          [class.loading]="isProcessing"
+          [disabled]="isProcessing || cartItems.length === 0">
+          <span *ngIf="!isProcessing">Place Order</span>
+          <span *ngIf="isProcessing" style="display:flex;align-items:center;gap:8px">
+            <span class="momo-spinner"></span>
+            Processing...
+          </span>
+        </button>
+
+      </form>
+
+      <!-- RIGHT: Summary -->
+      <div class="order-summary">
+        <div class="summary-card">
+          <h2 class="summary-title">Order Summary</h2>
+
+          <div class="empty-cart-msg" *ngIf="cartItems.length === 0">
+            <p>Your cart is empty.</p>
+            <button class="btn-secondary" routerLink="/shop">Go Shopping</button>
+          </div>
+
+          <div class="order-items" *ngIf="cartItems.length > 0">
+            <div class="order-item" *ngFor="let item of cartItems">
+              <img [src]="item.image || 'https://via.placeholder.com/60'" [alt]="item.name" class="item-thumb">
+              <div class="item-info">
+                <div class="item-name">{{ item.name }}</div>
+                <div class="item-meta">Qty: {{ item.quantity }}</div>
+              </div>
+              <div class="item-price">{{ formatPrice(item.price * item.quantity) }}</div>
+            </div>
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <div class="summary-rows" *ngIf="cartItems.length > 0">
+            <div class="summary-row">
+              <span>Subtotal</span><span>{{ formatPrice(subtotal) }}</span>
+            </div>
+            <div class="summary-row">
+              <span>Shipping</span><span class="free">Free</span>
+            </div>
+            <div class="summary-total">
+              <span>Total</span>
+              <span class="total-amount">{{ formatPrice(total) }}</span>
+            </div>
+          </div>
+
+          <div class="trust-badges">
+            <div class="badge-item">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>Secure Checkout</span>
+            </div>
+            <div class="badge-item">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+              <span>Free Returns</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

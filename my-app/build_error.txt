@@ -1,0 +1,245 @@
+[33m❯[39m Building...
+[32m✔[39m Building...
+[1mInitial chunk files[22m  [2m | [22m[1mNames[22m        [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32mmain-ZLWWELP2.js[39m     [2m | [22m[2mmain[22m         [2m | [22m[36m820.38 kB[39m[2m | [22m              [36m149.15 kB[39m
+[32mpolyfills-DOYHMSTV.js[39m[2m | [22m[2mpolyfills[22m    [2m | [22m [36m35.73 kB[39m[2m | [22m               [36m11.58 kB[39m
+[32mstyles-4HYL2AUZ.css[39m  [2m | [22m[2mstyles[22m       [2m | [22m[36m384 bytes[39m[2m | [22m              [36m384 bytes[39m
+
+[1m [22m                    [2m | [22m[1mInitial total[22m[2m | [22m[1m[93m856.49 kB[39m[22m[2m | [22m              [1m161.11 kB[22m
+
+Application bundle generation failed. [5.485 seconds] - 2026-03-19T16:19:54.935Z
+
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. Find more at https://v21.angular.dev/extended-diagnostics/NG8107[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/admin/admin.html:266:48:
+[37m      266 │ ... <td class="order-id">#{{ o._id?.[32mslice[37m(-6)?.toUpperCase() }}</td>
+          ╵                                     [32m~~~~~[0m
+
+  Warning occurs in the template of component Admin.
+
+    src/app/pages/admin/admin.ts:59:15:
+[37m      59 │   templateUrl: [32m'./admin.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. Find more at https://v21.angular.dev/extended-diagnostics/NG8107[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/admin/admin.html:267:42:
+[37m      267 │                 <td>{{ o.shippingAddress?.[32mfullName[37m || 'N/A' }}</td>
+          ╵                                           [32m~~~~~~~~[0m
+
+  Warning occurs in the template of component Admin.
+
+    src/app/pages/admin/admin.ts:59:15:
+[37m      59 │   templateUrl: [32m'./admin.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. Find more at https://v21.angular.dev/extended-diagnostics/NG8107[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/admin/admin.html:309:85:
+[37m      309 │ ...span class="star">★</span>{{ p.rating[32m?.toFix[37med(1) }}</div></td>
+          ╵                                         [32m~~~~~~~[0m
+
+  Warning occurs in the template of component Admin.
+
+    src/app/pages/admin/admin.ts:59:15:
+[37m      59 │   templateUrl: [32m'./admin.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. Find more at https://v21.angular.dev/extended-diagnostics/NG8107[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/admin/admin.html:346:48:
+[37m      346 │ ... <td class="order-id">#{{ o._id?.[32mslice[37m(-6)?.toUpperCase() }}</td>
+          ╵                                     [32m~~~~~[0m
+
+  Warning occurs in the template of component Admin.
+
+    src/app/pages/admin/admin.ts:59:15:
+[37m      59 │   templateUrl: [32m'./admin.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. Find more at https://v21.angular.dev/extended-diagnostics/NG8107[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/admin/admin.html:347:42:
+[37m      347 │                 <td>{{ o.shippingAddress?.[32mfullName[37m || 'N/A' }}</td>
+          ╵                                           [32m~~~~~~~~[0m
+
+  Warning occurs in the template of component Admin.
+
+    src/app/pages/admin/admin.ts:59:15:
+[37m      59 │   templateUrl: [32m'./admin.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. Find more at https://v21.angular.dev/extended-diagnostics/NG8107[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/admin/admin.html:348:42:
+[37m      348 │                 <td>{{ o.shippingAddress?.[32mphone[37m || '-' }}</td>
+          ╵                                           [32m~~~~~[0m
+
+  Warning occurs in the template of component Admin.
+
+    src/app/pages/admin/admin.ts:59:15:
+[37m      59 │   templateUrl: [32m'./admin.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. Find more at https://v21.angular.dev/extended-diagnostics/NG8107[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/admin/admin.html:393:65:
+[37m      393 │ ...ser-avatar-init">{{ u.username?.[32mcharAt[37m(0)?.toUpperCase() }}</div>
+          ╵                                    [32m~~~~~~[0m
+
+  Warning occurs in the template of component Admin.
+
+    src/app/pages/admin/admin.ts:59:15:
+[37m      59 │   templateUrl: [32m'./admin.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. Find more at https://v21.angular.dev/extended-diagnostics/NG8107[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/admin/admin.html:669:68:
+[37m      669 │ ...value">{{ selectedOrder.shippingAddress?.[32mfullName[37m || 'N/A' }}</p>
+          ╵                                             [32m~~~~~~~~[0m
+
+  Warning occurs in the template of component Admin.
+
+    src/app/pages/admin/admin.ts:59:15:
+[37m      59 │   templateUrl: [32m'./admin.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. Find more at https://v21.angular.dev/extended-diagnostics/NG8107[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/admin/admin.html:670:66:
+[37m      670 │ ...ass="od-sub">{{ selectedOrder.shippingAddress?.[32memail[37m || '' }}</p>
+          ╵                                                   [32m~~~~~[0m
+
+  Warning occurs in the template of component Admin.
+
+    src/app/pages/admin/admin.ts:59:15:
+[37m      59 │   templateUrl: [32m'./admin.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. Find more at https://v21.angular.dev/extended-diagnostics/NG8107[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/admin/admin.html:671:66:
+[37m      671 │ ...ass="od-sub">{{ selectedOrder.shippingAddress?.[32mphone[37m || '' }}</p>
+          ╵                                                   [32m~~~~~[0m
+
+  Warning occurs in the template of component Admin.
+
+    src/app/pages/admin/admin.ts:59:15:
+[37m      59 │   templateUrl: [32m'./admin.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. Find more at https://v21.angular.dev/extended-diagnostics/NG8107[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/admin/admin.html:675:68:
+[37m      675 │ ...="od-value">{{ selectedOrder.shippingAddress?.[32mstreet[37m || '' }}</p>
+          ╵                                                  [32m~~~~~~[0m
+
+  Warning occurs in the template of component Admin.
+
+    src/app/pages/admin/admin.ts:59:15:
+[37m      59 │   templateUrl: [32m'./admin.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator. Find more at https://v21.angular.dev/extended-diagnostics/NG8107[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/admin/admin.html:676:66:
+[37m      676 │ ...lass="od-sub">{{ selectedOrder.shippingAddress?.[32mcity[37m || '' }}</p>
+          ╵                                                    [32m~~~~[0m
+
+  Warning occurs in the template of component Admin.
+
+    src/app/pages/admin/admin.ts:59:15:
+[37m      59 │   templateUrl: [32m'./admin.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mbundle initial exceeded maximum budget. Budget 500.00 kB was not met by 356.49 kB with a total of 856.49 kB.[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap exceeded maximum budget. Budget 4.00 kB was not met by 5.06 kB with a total of 9.06 kB.[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap exceeded maximum budget. Budget 4.00 kB was not met by 14.80 kB with a total of 18.80 kB.[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap exceeded maximum budget. Budget 4.00 kB was not met by 3.88 kB with a total of 7.88 kB.[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap exceeded maximum budget. Budget 4.00 kB was not met by 11.97 kB with a total of 15.97 kB.[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap exceeded maximum budget. Budget 4.00 kB was not met by 20.08 kB with a total of 24.08 kB.[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap exceeded maximum budget. Budget 4.00 kB was not met by 4.31 kB with a total of 8.31 kB.[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap exceeded maximum budget. Budget 4.00 kB was not met by 5.06 kB with a total of 9.06 kB.[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap exceeded maximum budget. Budget 4.00 kB was not met by 27.36 kB with a total of 31.36 kB.[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap exceeded maximum budget. Budget 4.00 kB was not met by 19.95 kB with a total of 23.95 kB.[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Barlow+Condensed:ital,wght@0,700;0,800;0,900&display=swap exceeded maximum budget. Budget 4.00 kB was not met by 13.29 kB with a total of 17.29 kB.[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,800;1,900&display=swap exceeded maximum budget. Budget 4.00 kB was not met by 21.04 kB with a total of 25.04 kB.[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap exceeded maximum budget. Budget 4.00 kB was not met by 18.24 kB with a total of 22.24 kB.[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap exceeded maximum budget. Budget 4.00 kB was not met by 58.94 kB with a total of 62.94 kB.[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap exceeded maximum budget. Budget 8.00 kB was not met by 1.06 kB with a total of 9.06 kB.[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap exceeded maximum budget. Budget 8.00 kB was not met by 10.80 kB with a total of 18.80 kB.[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap exceeded maximum budget. Budget 8.00 kB was not met by 7.97 kB with a total of 15.97 kB.[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap exceeded maximum budget. Budget 8.00 kB was not met by 16.08 kB with a total of 24.08 kB.[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap exceeded maximum budget. Budget 8.00 kB was not met by 310 bytes with a total of 8.31 kB.[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap exceeded maximum budget. Budget 8.00 kB was not met by 1.06 kB with a total of 9.06 kB.[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap exceeded maximum budget. Budget 8.00 kB was not met by 23.36 kB with a total of 31.36 kB.[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap exceeded maximum budget. Budget 8.00 kB was not met by 15.95 kB with a total of 23.95 kB.[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Barlow+Condensed:ital,wght@0,700;0,800;0,900&display=swap exceeded maximum budget. Budget 8.00 kB was not met by 9.29 kB with a total of 17.29 kB.[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,800;1,900&display=swap exceeded maximum budget. Budget 8.00 kB was not met by 17.04 kB with a total of 25.04 kB.[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap exceeded maximum budget. Budget 8.00 kB was not met by 14.24 kB with a total of 22.24 kB.[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mcss-inline-fonts:https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap exceeded maximum budget. Budget 8.00 kB was not met by 54.94 kB with a total of 62.94 kB.[0m
+
+[39m[22m

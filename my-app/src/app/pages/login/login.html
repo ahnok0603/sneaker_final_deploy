@@ -1,0 +1,117 @@
+<div class="cl-auth-wrapper">
+  <div class="cl-bg-deco">
+    <span class="deco-circle c1"></span>
+    <span class="deco-circle c2"></span>
+    <span class="deco-circle c3"></span>
+    <span class="deco-tri t1"></span>
+    <span class="deco-tri t2"></span>
+    <span class="deco-tri t3"></span>
+    <span class="deco-tri t4"></span>
+    <span class="deco-line l1"></span>
+    <span class="deco-line l2"></span>
+  </div>
+
+  <div class="cl-auth-card">
+    <div class="cl-logo">
+      <span class="cl-logo-box">S</span>
+      <div class="cl-logo-text">SNEAKER<em>STORE</em></div>
+    </div>
+
+    <!-- ── FORGOT PASSWORD VIEW ── -->
+    <div *ngIf="mode === 'forgot'" class="cl-form">
+      <p class="cl-forgot-title" style="text-align:center">FORGOT PASSWORD</p>
+
+      <div *ngIf="errMessage"     class="cl-alert cl-alert-error">⚠ {{ errMessage }}</div>
+      <div *ngIf="successMessage" class="cl-alert cl-alert-success">✓ {{ successMessage }}</div>
+
+      <div class="cl-field">
+        <label>EMAIL ADDRESS</label>
+        <input type="email" [(ngModel)]="email" placeholder="email@example.com"
+               (keyup.enter)="forgotPassword()"/>
+      </div>
+      <button class="cl-btn" (click)="forgotPassword()" [disabled]="loading">
+        {{ loading ? 'Sending...' : 'SEND RESET LINK' }}
+      </button>
+      <button class="cl-back-link" (click)="switchMode('login')" type="button"
+              style="justify-content:center">
+        ← Back to Sign In
+      </button>
+    </div>
+
+    <!-- ── TABS (Login / Register) ── -->
+    <div *ngIf="mode !== 'forgot'" class="cl-tabs">
+      <button class="cl-tab" [class.active]="mode === 'login'"    (click)="switchMode('login')">Sign In</button>
+      <button class="cl-tab" [class.active]="mode === 'register'" (click)="switchMode('register')">Sign Up</button>
+    </div>
+
+    <!-- Alerts (Login / Register) -->
+    <div *ngIf="mode !== 'forgot' && errMessage"     class="cl-alert cl-alert-error">⚠ {{ errMessage }}</div>
+    <div *ngIf="mode !== 'forgot' && successMessage" class="cl-alert cl-alert-success">✓ {{ successMessage }}</div>
+
+    <!-- ── LOGIN ── -->
+    <div *ngIf="mode === 'login'" class="cl-form">
+      <div class="cl-field">
+        <label>EMAIL</label>
+        <input type="email" [(ngModel)]="email" placeholder="email@example.com"
+               (keyup.enter)="login()"/>
+      </div>
+      <div class="cl-field">
+        <label>PASSWORD</label>
+        <div class="cl-pw-wrap">
+          <input [type]="showPw ? 'text' : 'password'" [(ngModel)]="password"
+                 placeholder="••••••••" (keyup.enter)="login()"/>
+          <button class="cl-pw-toggle" (click)="showPw = !showPw" type="button">
+            <img [src]="showPw
+              ? 'https://api.iconify.design/lucide/eye-off.svg?color=%23aaa'
+              : 'https://api.iconify.design/lucide/eye.svg?color=%23aaa'"
+              width="16" height="16" alt="">
+          </button>
+        </div>
+      </div>
+      <div class="cl-forgot">
+        <a (click)="switchMode('forgot')">Forgot password?</a>
+      </div>
+      <button class="cl-btn" (click)="login()" [disabled]="loading">
+        {{ loading ? 'Processing...' : 'SIGN IN' }}
+      </button>
+      <p class="cl-switch">Don't have an account?
+        <a (click)="switchMode('register')">Sign up</a>
+      </p>
+    </div>
+
+    <!-- ── REGISTER ── -->
+    <div *ngIf="mode === 'register'" class="cl-form">
+      <div class="cl-field">
+        <label>USERNAME</label>
+        <input type="text" [(ngModel)]="username" placeholder="Your name"/>
+      </div>
+      <div class="cl-field">
+        <label>EMAIL</label>
+        <input type="email" [(ngModel)]="email" placeholder="email@example.com"/>
+      </div>
+      <div class="cl-field">
+        <label>PASSWORD</label>
+        <div class="cl-pw-wrap">
+          <input [type]="showPw ? 'text' : 'password'" [(ngModel)]="password"
+                 placeholder="Minimum 6 characters"/>
+          <button class="cl-pw-toggle" (click)="showPw = !showPw" type="button">
+            <img [src]="showPw
+              ? 'https://api.iconify.design/lucide/eye-off.svg?color=%23aaa'
+              : 'https://api.iconify.design/lucide/eye.svg?color=%23aaa'"
+              width="16" height="16" alt="">
+          </button>
+        </div>
+      </div>
+      <div class="cl-field">
+        <label>CONFIRM PASSWORD</label>
+        <input type="password" [(ngModel)]="confirmPassword" placeholder="Re-enter your password"/>
+      </div>
+      <button class="cl-btn" (click)="register()" [disabled]="loading">
+        {{ loading ? 'Processing...' : 'CREATE ACCOUNT' }}
+      </button>
+      <p class="cl-switch">Already have an account?
+        <a (click)="switchMode('login')">Sign in</a>
+      </p>
+    </div>
+  </div>
+</div>
