@@ -293,12 +293,12 @@
 
           <div class="oc-items">
             <div class="oc-item" *ngFor="let item of order.items">
-              <img [src]="item.image || 'https://placehold.co/52x52/1e293b/f97316?text=👟'" [alt]="item.name" class="oc-img">
+              <img [src]="item.image || 'https://placehold.co/52x52/1e293b/f97316?text=👟'" [alt]="item.productName" class="oc-img">
               <div class="oc-item-info">
-                <div class="oc-item-name">{{ item.name }}</div>
+                <div class="oc-item-name">{{ item.productName }}</div>
                 <div class="oc-item-qty">Qty: {{ item.quantity }}</div>
               </div>
-              <div class="oc-item-price">{{ formatPrice(item.price * item.quantity) }}</div>
+              <div class="oc-item-price">{{ formatPrice(item.unitPrice * item.quantity) }}</div>
             </div>
           </div>
 
@@ -315,7 +315,7 @@
               <ng-container *ngIf="canReview(order.status)">
                 <button class="oc-btn btn-review" *ngFor="let item of order.items" (click)="openReview(order, item)">
                   <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  Review · {{ item.name }}
+                  Review · {{ item.productName }}
                 </button>
               </ng-container>
             </div>
@@ -336,9 +336,9 @@
           <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
         <div class="rm-head">
-          <img [src]="reviewModal.item?.image || 'https://placehold.co/56x56/1e293b/f97316?text=👟'" class="rm-img" [alt]="reviewModal.item?.name">
+          <img [src]="reviewModal.item?.image || 'https://placehold.co/56x56/1e293b/f97316?text=👟'" class="rm-img" [alt]="reviewModal.item?.productName">
           <div>
-            <div class="rm-product-name">{{ reviewModal.item?.name }}</div>
+            <div class="rm-product-name">{{ reviewModal.item?.productName }}</div>
             <div class="rm-order-id">Order #{{ reviewModal.order?._id?.slice(-8)?.toUpperCase() }}</div>
           </div>
         </div>

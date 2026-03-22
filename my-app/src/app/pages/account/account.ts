@@ -7,9 +7,17 @@ import { Auth, UserProfile } from '../../myservices/auth';
 import { environment } from '../../../environments/environment';
 export type OrderStatus = 'pending' | 'confirmed' | 'shipping' | 'delivered' | 'review' | 'returned' | 'cancelled' | 'paid' | 'failed';
 
+export interface OrderItem {
+  productId: string;
+  productName: string;
+  unitPrice: number;
+  quantity: number;
+  image?: string;
+}
+
 export interface Order {
   _id: string;
-  items: { name: string; price: number; quantity: number; image?: string }[];
+  items: OrderItem[];
   totalAmount: number;
   status: OrderStatus;
   momoOrderId?: string;
@@ -256,7 +264,7 @@ export class Account implements OnInit {
     if (!m.rating) { m.err = 'Please select a rating!'; return; }
     m.loading = true; m.err = '';
     this.http.post<any>(
-      `${this.API}/api/products/${m.item.fashionId}/reviews`,
+      `${this.API}/api/products/${m.item.productId}/reviews`,
       { rating: m.rating, comment: m.comment, orderId: m.order!._id },
       { headers: this.getHeaders() }
     ).subscribe({
@@ -318,6 +326,9 @@ export class Account implements OnInit {
     return 'strong';
   }
 
-  formatPrice(p: number): string { return new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(p); }
+  formatPrice(p: number): string {
+    if (!p || isNaN(p)) return '$0';
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(p);
+  }
   formatDate(d: string): string  { return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
 }
