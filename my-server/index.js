@@ -70,6 +70,9 @@ const UserSchema = new mongoose.Schema({
     zip:     { type: String, default: '' },
     country: { type: String, default: 'Vietnam' },
   },
+  status:               { type: String, enum: ['active', 'locked'], default: 'active' },
+  customerGroup:        { type: String, enum: ['normal', 'potential', 'vip'], default: 'normal' },
+  notes:                { type: String, default: '' },
   createdAt:            { type: Date, default: Date.now },
   resetPasswordToken:   { type: String, default: null },
   resetPasswordExpires: { type: Date,   default: null }
@@ -999,11 +1002,125 @@ app.put('/orders/admin/:id/status', verifyToken, requireAdmin, async (req, res) 
   }
 });
 
+// PUT update order details (admin)
+app.put('/orders/admin/:id/details', verifyToken, requireAdmin, async (req, res) => {
+  try {
+    const { shippingAddress, items, status, paymentStatus } = req.body;
+    
+    // 1. Update items
+    let newItemsTotal = 0;
+    if (items && Array.isArray(items)) {
+      for (const item of items) {
+        if (item._id) {
+          const qty = Number(item.quantity) || 1;
+          const price = Number(item.unitPrice) || 0;
+          const userUpdatedItem = {
+            productName: item.productName,
+            quantity: qty,
+            unitPrice: price,
+            totalPrice: qty * price
+          };
+          await OrderDetail.findByIdAndUpdate(item._id, { $set: userUpdatedItem });
+          newItemsTotal += userUpdatedItem.totalPrice;
+        }
+      }
+    }
+
+    // 2. Update order
+    const orderToUpdate = await Order.findById(req.params.id);
+    if (!orderToUpdate) return res.status(404).json({ message: 'Order not found' });
+
+    if (shippingAddress) {
+      if (shippingAddress.fullName !== undefined) orderToUpdate.shippingAddress.fullName = shippingAddress.fullName;
+      if (shippingAddress.email !== undefined) orderToUpdate.shippingAddress.email = shippingAddress.email;
+      if (shippingAddress.phone !== undefined) orderToUpdate.shippingAddress.phone = shippingAddress.phone;
+      if (shippingAddress.street !== undefined) orderToUpdate.shippingAddress.street = shippingAddress.street;
+      if (shippingAddress.city !== undefined) orderToUpdate.shippingAddress.city = shippingAddress.city;
+    }
+    if (status !== undefined) orderToUpdate.status = status;
+    if (paymentStatus !== undefined) orderToUpdate.paymentStatus = paymentStatus;
+    
+    if (items && Array.isArray(items)) {
+      orderToUpdate.totalAmount = newItemsTotal + (orderToUpdate.shippingFee || 0) - (orderToUpdate.discountAmount || 0);
+    }
+
+    orderToUpdate.updatedAt = new Date();
+    await orderToUpdate.save();
+
+    const order = await Order.findById(req.params.id).lean();
+    const details = await OrderDetail.find({ orderId: req.params.id }).lean();
+    const user = await User.findById(order.userId).select('username email avatar').lean();
+
+    res.json({ ...order, items: details, user: user || null });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // GET all users (admin)
 app.get('/auth/admin/users', verifyToken, requireAdmin, async (req, res) => {
   try {
     const users = await User.find().select('-password').sort({ createdAt: -1 });
     res.json(users);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// PUT update user detail (admin)
+app.put('/auth/admin/users/:id', verifyToken, requireAdmin, async (req, res) => {
+  try {
+    const { username, email, phone, address, password, status, customerGroup, notes } = req.body;
+    const updateData = {};
+    if (username) {
+      if (!username.trim()) return res.status(400).json({ message: 'Username is required' });
+      const exists = await User.findOne({ username: username.trim(), _id: { $ne: req.params.id } });
+      if (exists) return res.status(400).json({ message: 'Username này đã được dùng!' });
+      updateData.username = username.trim();
+    }
+    if (email) {
+      if (!email.trim()) return res.status(400).json({ message: 'Email is required' });
+      const exists = await User.findOne({ email: email.trim(), _id: { $ne: req.params.id } });
+      if (exists) return res.status(400).json({ message: 'Email này đã được dùng!' });
+      updateData.email = email.trim();
+    }
+
+    if (phone !== undefined) updateData.phone = phone;
+    if (status !== undefined) updateData.status = status;
+    if (customerGroup !== undefined) updateData.customerGroup = customerGroup;
+    if (notes !== undefined) updateData.notes = notes;
+
+    if (address) {
+      if (address.street !== undefined) updateData['address.street'] = address.street;
+      if (address.city !== undefined) updateData['address.city'] = address.city;
+      if (address.state !== undefined) updateData['address.state'] = address.state;
+      if (address.zip !== undefined) updateData['address.zip'] = address.zip;
+      if (address.country !== undefined) updateData['address.country'] = address.country;
+    }
+
+    if (password && password.trim()) {
+      updateData.password = await bcrypt.hash(password.trim(), 10);
+    }
+
+    const updated = await User.findByIdAndUpdate(
+      req.params.id,
+      { $set: updateData },
+      { new: true }
+    ).select('-password');
+    
+    if (!updated) return res.status(404).json({ message: 'Không tìm thấy người dùng!' });
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// DELETE user (admin)
+app.delete('/auth/admin/users/:id', verifyToken, requireAdmin, async (req, res) => {
+  try {
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    if (!deletedUser) return res.status(404).json({ message: 'Không tìm thấy người dùng!' });
+    res.json({ message: 'Người dùng đã bị xóa!' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

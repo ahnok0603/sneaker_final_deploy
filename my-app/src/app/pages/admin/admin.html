@@ -382,7 +382,7 @@
       <div class="table-box">
         <div class="table-wrap">
           <table class="adm-table">
-            <thead><tr><th>User</th><th>Email</th><th>Phone</th><th>Role</th><th>Joined</th></tr></thead>
+            <thead><tr><th>User</th><th>Email</th><th>Phone</th><th>Role</th><th>Joined</th><th>Actions</th></tr></thead>
             <tbody>
               <tr *ngFor="let u of filteredUsers">
                 <td><div class="user-cell">
@@ -397,6 +397,16 @@
                 <td>{{ u.phone || '-' }}</td>
                 <td><span class="role-badge" [class.admin]="u.role==='admin'">{{ u.role || 'user' }}</span></td>
                 <td class="order-date">{{ formatDate(u.createdAt || '') }}</td>
+                <td>
+                  <div class="action-btns">
+                    <button class="act-btn edit" (click)="editUser(u)" title="Edit User">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    </button>
+                    <button class="act-btn delete" (click)="confirmDeleteUser(u)" title="Delete User">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                    </button>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -655,70 +665,188 @@
 
   <!-- ══ ORDER DETAIL MODAL ══ -->
   <div class="modal-overlay" *ngIf="showOrderModal" (click)="showOrderModal=false">
-    <div class="modal-box order-modal" (click)="$event.stopPropagation()">
+    <div class="modal-box order-modal" style="width: 900px; max-width: 95vw;" (click)="$event.stopPropagation()">
       <div class="modal-head">
-        <span>Order Detail — #{{ selectedOrder?._id?.slice(-6)?.toUpperCase() }}</span>
+        <span>Edit Order — #{{ selectedOrder?._id?.slice(-6)?.toUpperCase() }}</span>
         <button (click)="showOrderModal=false">✕</button>
       </div>
       <div class="modal-body" *ngIf="selectedOrder && !orderModalLoading">
-        <div class="order-detail-grid">
+        <div class="order-detail-grid" style="grid-template-columns: 1fr 1fr; gap: 24px;">
           <!-- Left: info -->
           <div>
             <div class="od-section">
-              <span class="od-label">Customer</span>
-              <p class="od-value">{{ selectedOrder.shippingAddress?.fullName || 'N/A' }}</p>
-              <p class="od-sub">{{ selectedOrder.shippingAddress?.email || '' }}</p>
-              <p class="od-sub">{{ selectedOrder.shippingAddress?.phone || '' }}</p>
+              <span class="od-label">Customer / Shipping Address</span>
+              <div class="acc-field" style="margin-top: 8px;">
+                <label>Full Name</label>
+                <input type="text" [(ngModel)]="selectedOrder.shippingAddress.fullName" class="pf-input" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 6px;">
+              </div>
+              <div class="acc-field" style="margin-top: 8px;">
+                <label>Email</label>
+                <input type="email" [(ngModel)]="selectedOrder.shippingAddress.email" class="pf-input" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 6px;">
+              </div>
+              <div class="acc-field" style="margin-top: 8px;">
+                <label>Phone</label>
+                <input type="text" [(ngModel)]="selectedOrder.shippingAddress.phone" class="pf-input" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 6px;">
+              </div>
+              <div class="acc-field" style="margin-top: 8px;">
+                <label>Street</label>
+                <input type="text" [(ngModel)]="selectedOrder.shippingAddress.street" class="pf-input" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 6px;">
+              </div>
+              <div class="acc-field" style="margin-top: 8px;">
+                <label>City</label>
+                <input type="text" [(ngModel)]="selectedOrder.shippingAddress.city" class="pf-input" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 6px;">
+              </div>
             </div>
-            <div class="od-section">
-              <span class="od-label">Shipping Address</span>
-              <p class="od-value">{{ selectedOrder.shippingAddress?.street || '' }}</p>
-              <p class="od-sub">{{ selectedOrder.shippingAddress?.city || '' }}</p>
-            </div>
-            <div class="od-section">
-              <span class="od-label">Payment</span>
-              <p class="od-value">{{ selectedOrder.paymentMethod | uppercase }}</p>
-              <span class="pay-badge" [class]="'pay-' + selectedOrder.paymentMethod">{{ selectedOrder.paymentMethod }}</span>
-            </div>
-            <div class="od-section">
-              <span class="od-label">Status</span>
-              <span class="status-badge" [class]="'status-' + selectedOrder.status">{{ selectedOrder.status }}</span>
-            </div>
-            <div class="od-section" *ngIf="selectedOrder.note">
-              <span class="od-label">Note</span>
-              <p class="od-sub">{{ selectedOrder.note }}</p>
+            
+            <div class="od-section" style="margin-top: 16px;">
+              <span class="od-label">Order & Payment Status</span>
+              <div class="acc-field" style="margin-top: 8px;">
+                <label>Order Status</label>
+                <select [(ngModel)]="selectedOrder.status" class="status-select" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 6px;">
+                  <option value="pending">Pending</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="shipping">Shipping</option>
+                  <option value="delivered">Delivered</option>
+                  <option value="cancelled">Cancelled</option>
+                  <option value="returned">Returned</option>
+                </select>
+              </div>
+              <div class="acc-field" style="margin-top: 8px;">
+                <label>Payment Status</label>
+                <select [(ngModel)]="selectedOrder.paymentStatus" class="status-select" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 6px;">
+                  <option value="unpaid">Unpaid</option>
+                  <option value="paid">Paid</option>
+                  <option value="refunded">Refunded</option>
+                </select>
+              </div>
             </div>
           </div>
           <!-- Right: items -->
           <div>
             <div class="od-section">
               <span class="od-label">Items</span>
-              <div class="od-items">
-                <div class="od-item" *ngFor="let item of selectedOrder.items">
+              <div class="od-items" style="max-height: 400px; overflow-y: auto;">
+                <div class="od-item" *ngFor="let item of selectedOrder.items" style="align-items: flex-start;">
                   <img [src]="item.image" class="od-img" (error)="$event.target.style.display='none'"/>
-                  <div class="od-item-info">
-                    <span class="od-item-name">{{ item.productName || item.name }}</span>
-                    <span class="od-item-meta">Qty: {{ item.quantity }} × {{ formatCurrency(item.unitPrice || item.price) }}</span>
+                  <div class="od-item-info" style="flex: 1;">
+                    <input type="text" [(ngModel)]="item.productName" class="pf-input" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 4px; font-size: 13px; margin-bottom: 4px;" placeholder="Product Name">
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                      <span style="font-size: 12px; color: var(--color-text-secondary);">Qty:</span>
+                      <input type="number" [(ngModel)]="item.quantity" class="pf-input" style="width: 60px; border: 1px solid var(--border); border-radius: 4px; padding: 4px; font-size: 13px;" min="1">
+                      <span style="font-size: 12px; color: var(--color-text-secondary);">Price: $</span>
+                      <input type="number" [(ngModel)]="item.unitPrice" class="pf-input" style="width: 90px; border: 1px solid var(--border); border-radius: 4px; padding: 4px; font-size: 13px;" step="0.01">
+                    </div>
                   </div>
-                  <span class="od-item-total">{{ formatCurrency(item.totalPrice || (item.unitPrice * item.quantity)) }}</span>
                 </div>
               </div>
             </div>
             <div class="od-total-row">
-              <span>Subtotal</span><span>{{ formatCurrency(selectedOrder.totalAmount) }}</span>
-            </div>
-            <div class="od-total-row" *ngIf="selectedOrder.shippingFee">
-              <span>Shipping</span><span>{{ formatCurrency(selectedOrder.shippingFee || 0) }}</span>
-            </div>
-            <div class="od-total-row grand">
-              <span>Total</span><span class="order-total">{{ formatCurrency(selectedOrder.totalAmount) }}</span>
+              <span style="font-size: 12px; color: var(--color-text-secondary);">* Subtotals/Totals recalculate automatically on save</span>
             </div>
           </div>
         </div>
+        <div *ngIf="orderFormError" class="modal-err" style="margin-top:12px; padding: 0 16px; color: #ef4444; font-weight: 500;">⚠ {{ orderFormError }}</div>
       </div>
       <div class="modal-body" *ngIf="orderModalLoading" style="text-align:center;padding:40px;color:var(--muted)">Loading...</div>
       <div class="modal-foot">
-        <button class="modal-cancel" (click)="showOrderModal=false">Close</button>
+        <button class="modal-cancel" (click)="showOrderModal=false">Cancel</button>
+        <button class="modal-del" style="background:#3b82f6; border-color:#3b82f6; color:#fff;" (click)="saveOrder()" [disabled]="orderModalLoading">{{ orderModalLoading ? 'Saving...' : 'Save Changes' }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ USER EDIT MODAL ══ -->
+  <div class="modal-overlay" *ngIf="showUserModal" (click)="closeUserModal()">
+    <div class="modal-box" style="width: 800px; max-width: 90vw; max-height: 90vh; overflow-y: auto;" (click)="$event.stopPropagation()">
+      <div class="modal-head">
+        <span>Edit User</span>
+        <button (click)="closeUserModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="pf-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 16px;">
+          <!-- Basic Info -->
+          <div class="acc-field">
+            <label>Username</label>
+            <input type="text" [(ngModel)]="userForm.username" class="pf-input" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 8px;">
+          </div>
+          <div class="acc-field">
+            <label>Email</label>
+            <input type="email" [(ngModel)]="userForm.email" class="pf-input" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 8px;">
+          </div>
+          <div class="acc-field">
+            <label>Phone</label>
+            <input type="text" [(ngModel)]="userForm.phone" class="pf-input" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 8px;">
+          </div>
+          <div class="acc-field">
+            <label>New Password (Optional)</label>
+            <input type="password" [(ngModel)]="userForm.password" class="pf-input" placeholder="Leave blank to keep current" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 8px;">
+          </div>
+
+          <!-- Address -->
+          <div class="acc-field">
+            <label>Street</label>
+            <input type="text" [(ngModel)]="userForm.address.street" class="pf-input" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 8px;">
+          </div>
+          <div class="acc-field" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <div>
+              <label>City</label>
+              <input type="text" [(ngModel)]="userForm.address.city" class="pf-input" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 8px;">
+            </div>
+            <div>
+              <label>State</label>
+              <input type="text" [(ngModel)]="userForm.address.state" class="pf-input" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 8px;">
+            </div>
+          </div>
+          <div class="acc-field" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <div>
+              <label>Zip</label>
+              <input type="text" [(ngModel)]="userForm.address.zip" class="pf-input" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 8px;">
+            </div>
+            <div>
+              <label>Country</label>
+              <input type="text" [(ngModel)]="userForm.address.country" class="pf-input" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 8px;">
+            </div>
+          </div>
+
+          <!-- Account Settings -->
+          <div class="acc-field">
+            <label>Status</label>
+            <select [(ngModel)]="userForm.status" class="status-select" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 8px;">
+              <option value="active">Active</option>
+              <option value="locked">Locked</option>
+            </select>
+          </div>
+          <div class="acc-field">
+            <label>Customer Group</label>
+            <select [(ngModel)]="userForm.customerGroup" class="status-select" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 8px;">
+              <option value="normal">Normal</option>
+              <option value="potential">Potential</option>
+              <option value="vip">VIP</option>
+            </select>
+          </div>
+          
+          <div class="acc-field" style="grid-column: 1 / -1; margin-top: 8px;">
+            <label>Notes</label>
+            <textarea [(ngModel)]="userForm.notes" class="pf-input" rows="3" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 8px; font-family: inherit; resize: vertical;"></textarea>
+          </div>
+        </div>
+        <div *ngIf="userModalError" class="modal-err" style="margin-top:12px; padding: 0 16px; color: #ef4444; font-weight: 500;">⚠ {{ userModalError }}</div>
+      </div>
+      <div class="modal-foot">
+        <button class="modal-cancel" (click)="closeUserModal()">Cancel</button>
+        <button class="modal-del" style="background:#3b82f6; border-color:#3b82f6; color:#fff;" (click)="saveUser()" [disabled]="userModalLoading">{{ userModalLoading ? 'Saving...' : 'Save Changes' }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Delete Confirm -->
+  <div class="modal-overlay" *ngIf="showUserDeleteModal" (click)="showUserDeleteModal=false">
+    <div class="modal-box small" (click)="$event.stopPropagation()">
+      <div class="modal-head"><span>Delete User</span><button (click)="showUserDeleteModal=false">✕</button></div>
+      <div class="modal-body"><p style="color:#aaa;font-size:14px">Delete user <strong style="color:#fff">{{ deletingUser?.username }}</strong>? This cannot be undone.</p></div>
+      <div class="modal-foot">
+        <button class="modal-cancel" (click)="showUserDeleteModal=false">Cancel</button>
+        <button class="modal-del" (click)="deleteUser()" [disabled]="userDeleteLoading">{{ userDeleteLoading ? 'Deleting...' : 'Delete' }}</button>
       </div>
     </div>
   </div>

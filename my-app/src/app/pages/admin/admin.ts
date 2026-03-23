@@ -30,6 +30,10 @@ interface AdminUser {
   phone?: string;
   role?: string;
   avatar?: string;
+  address?: { street?: string; city?: string; state?: string; zip?: string; country?: string };
+  status?: string;
+  customerGroup?: string;
+  notes?: string;
   createdAt?: string;
 }
 
@@ -128,6 +132,22 @@ export class Admin implements OnInit {
   showOrderModal  = false;
   selectedOrder:  Order | null = null;
   orderModalLoading = false;
+  orderFormError = '';
+
+  // ── User detail modal ──
+  showUserModal = false;
+  editingUser: AdminUser | null = null;
+  userForm = { 
+    username: '', email: '', phone: '',
+    address: { street: '', city: '', state: '', zip: '', country: 'Vietnam' },
+    status: 'active', customerGroup: 'normal', notes: '', password: ''
+  };
+  userModalError = '';
+  userModalLoading = false;
+
+  showUserDeleteModal = false;
+  deletingUser: AdminUser | null = null;
+  userDeleteLoading = false;
 
   // ── Review delete ──
   showReviewDeleteModal = false;
@@ -302,6 +322,85 @@ export class Admin implements OnInit {
   }
 
   // ─────────────────────────────────────────
+  //  USER CRUD
+  // ─────────────────────────────────────────
+  editUser(u: AdminUser): void {
+    this.editingUser = u;
+    this.userForm = { 
+      username: u.username || '', 
+      email: u.email || '', 
+      phone: u.phone || '', 
+      address: {
+        street: u.address?.street || '',
+        city: u.address?.city || '',
+        state: u.address?.state || '',
+        zip: u.address?.zip || '',
+        country: u.address?.country || 'Vietnam'
+      },
+      status: u.status || 'active',
+      customerGroup: u.customerGroup || 'normal',
+      notes: u.notes || '',
+      password: ''
+    };
+    this.userModalError = '';
+    this.showUserModal = true;
+  }
+
+  closeUserModal(): void {
+    this.showUserModal = false;
+    this.editingUser = null;
+    this.userModalError = '';
+  }
+
+  saveUser(): void {
+    if (!this.editingUser) return;
+    if (!this.userForm.username.trim() || !this.userForm.email.trim()) {
+      this.userModalError = 'Username and Email are required.'; return;
+    }
+    this.userModalLoading = true;
+    this._http.put<AdminUser>(`${this.apiUrl}/auth/admin/users/${this.editingUser._id}`, this.userForm).subscribe({
+      next: (updatedUser) => {
+        this.userModalLoading = false;
+        this.showToast('User updated!');
+        this.closeUserModal();
+        const idx = this.allUsers.findIndex(u => u._id === updatedUser._id);
+        if (idx !== -1) {
+          this.allUsers[idx] = { ...this.allUsers[idx], ...updatedUser };
+          this.filterUsers();
+        }
+      },
+      error: (err) => {
+        this.userModalLoading = false;
+        this.userModalError = err.error?.message || 'Update failed.';
+      }
+    });
+  }
+
+  confirmDeleteUser(u: AdminUser): void {
+    this.deletingUser = u;
+    this.showUserDeleteModal = true;
+  }
+
+  deleteUser(): void {
+    if (!this.deletingUser) return;
+    this.userDeleteLoading = true;
+    this._http.delete(`${this.apiUrl}/auth/admin/users/${this.deletingUser._id}`).subscribe({
+      next: () => {
+        this.userDeleteLoading = false;
+        this.showToast('User deleted!');
+        this.showUserDeleteModal = false;
+        this.allUsers = this.allUsers.filter(u => u._id !== this.deletingUser?._id);
+        this.filterUsers();
+        this.deletingUser = null;
+      },
+      error: (err) => {
+        this.userDeleteLoading = false;
+        this.showToast('Failed to delete user.');
+      }
+    });
+  }
+
+  // ─────────────────────────────────────────
   //  PRODUCT CRUD — gửi JSON (server dùng req.body)
   // ─────────────────────────────────────────
   openAddProduct(): void {
@@ -404,6 +503,36 @@ export class Admin implements OnInit {
     this._http.put(`${this.apiUrl}/orders/admin/${order._id}/status`, { status: order.status }).subscribe({
       next: () => this.showToast('Order status updated!'),
       error: () => this.showToast('Update failed.', true)
+    });
+  }
+
+  saveOrder(): void {
+    if (!this.selectedOrder) return;
+    this.orderModalLoading = true;
+    this.orderFormError = '';
+    const body = {
+      shippingAddress: this.selectedOrder.shippingAddress,
+      items: this.selectedOrder.items,
+      status: this.selectedOrder.status,
+      paymentStatus: this.selectedOrder.paymentStatus
+    };
+    
+    this._http.put<Order>(`${this.apiUrl}/orders/admin/${this.selectedOrder._id}/details`, body).subscribe({
+      next: (updatedOrder) => {
+        this.orderModalLoading = false;
+        this.selectedOrder = updatedOrder;
+        this.showToast('Order details updated!');
+        // Update in list
+        const idx = this.allOrders.findIndex(o => o._id === updatedOrder._id);
+        if (idx !== -1) {
+          this.allOrders[idx] = { ...this.allOrders[idx], ...updatedOrder };
+          this.filterOrders(this.orderFilter);
+        }
+      },
+      error: (err) => {
+        this.orderModalLoading = false;
+        this.orderFormError = err.error?.message || 'Failed to update order.';
+      }
     });
   }
 
