@@ -69,6 +69,7 @@ Chú thích:
 | 🔒 Admin| Yêu cầu Token quản trị viên (Admin) |
 
 1. Xác thực & Người dùng
+
 | Method | Endpoint | Mô tả | Auth |
 | :--- | :--- | :--- | :---: |
 | POST | /api/users/register | Đăng ký tài khoản mới | — |
@@ -78,6 +79,7 @@ Chú thích:
 
 2. Quản trị hệ thống (Admin)
 Toàn bộ yêu cầu giới hạn cho quyền quản trị viên.
+
 | Method | Endpoint | Mô tả | Auth |
 | :--- | :--- | :--- | :---: |
 | GET | /api/users | Danh sách toàn bộ người dùng | 🔒 Admin |
@@ -87,6 +89,7 @@ Toàn bộ yêu cầu giới hạn cho quyền quản trị viên.
 | DELETE| /api/sneakers/:id | Nghỉ bán/Xóa một mẫu giày | 🔒 Admin |
 
 3. Sản phẩm (Giày) & Đánh giá
+
 | Method | Endpoint | Mô tả | Auth |
 | :--- | :--- | :--- | :---: |
 | GET | /api/sneakers | Danh sách sản phẩm hiển thị ra shop | — |
@@ -95,6 +98,7 @@ Toàn bộ yêu cầu giới hạn cho quyền quản trị viên.
 | POST | /api/reviews | Gửi đánh giá/Review sản phẩm | 🔑 JWT |
 
 4. Đơn hàng & Giỏ hàng
+
 | Method | Endpoint | Mô tả | Auth |
 | :--- | :--- | :--- | :---: |
 | GET | /api/cart | Lấy giỏ hàng hiện tại của user | 🔑 JWT |
