@@ -1,9 +1,10 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { Header } from './components/header/header';
 import { Footer } from './components/footer/footer';
+
+declare var Tawk_API: any;
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,33 @@ import { Footer } from './components/footer/footer';
 export class App {
   protected readonly title = signal('my-app');
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.toggleChatbox();
+      }
+    });
+  }
+
+  toggleChatbox() {
+    if (typeof Tawk_API !== 'undefined') {
+      if (Tawk_API.hideWidget && Tawk_API.showWidget) {
+        if (this.router.url.startsWith('/admin')) {
+          Tawk_API.hideWidget();
+        } else {
+          Tawk_API.showWidget();
+        }
+      } else {
+        Tawk_API.onLoad = () => {
+          if (this.router.url.startsWith('/admin')) {
+            Tawk_API.hideWidget();
+          } else {
+            Tawk_API.showWidget();
+          }
+        };
+      }
+    }
+  }
 
   isAdminRoute(): boolean {
     return this.router.url.startsWith('/admin');
