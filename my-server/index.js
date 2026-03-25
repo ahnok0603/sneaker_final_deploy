@@ -327,22 +327,22 @@ app.post('/auth/forgot-password', async (req, res) => {
     if (!email) return res.status(400).json({ message: 'Vui lòng nhập email!' });
 
     const user = await User.findOne({ email });
-    // Luôn trả 200 để tránh lộ thông tin email có tồn tại không
-    if (!user) return res.json({ message: 'Nếu email tồn tại, link đặt lại đã được gửi.' });
 
     // Tạo token ngẫu nhiên 32 bytes, hết hạn sau 15 phút
     const token   = crypto.randomBytes(32).toString('hex');
     const expires = new Date(Date.now() + 15 * 60 * 1000); // 15 phút
 
-    user.resetPasswordToken   = token;
-    user.resetPasswordExpires = expires;
-    await user.save();
+    if (user) {
+      user.resetPasswordToken   = token;
+      user.resetPasswordExpires = expires;
+      await user.save();
+    }
 
     const resetLink = `${CLIENT_URL}/reset-password?token=${token}`;
 
     await transporter.sendMail({
       from:    `"Sneaker Store" <${EMAIL_USER}>`,
-      to:      user.email,
+      to:      email,
       subject: '🔑 Đặt lại mật khẩu — Sneaker Store',
       html: `
         <div style="font-family:'DM Sans',sans-serif;max-width:520px;margin:auto;background:#0f1320;color:#fff;border-radius:8px;overflow:hidden;">
@@ -351,7 +351,7 @@ app.post('/auth/forgot-password', async (req, res) => {
             <h2 style="font-size:22px;letter-spacing:3px;margin-bottom:8px;">SNEAKER STORE</h2>
             <p style="color:rgba(255,255,255,0.6);font-size:14px;margin-bottom:24px;">Đặt lại mật khẩu của bạn</p>
             <p style="font-size:14px;line-height:1.7;color:rgba(255,255,255,0.85);">
-              Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản <strong>${user.email}</strong>.<br>
+              Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản <strong>${email}</strong>.<br>
               Link có hiệu lực trong <strong>15 phút</strong>.
             </p>
             <a href="${resetLink}"
@@ -370,7 +370,7 @@ app.post('/auth/forgot-password', async (req, res) => {
       `
     });
 
-    res.json({ message: 'Nếu email tồn tại, link đặt lại đã được gửi.' });
+    res.json({ message: 'Đã gửi link đặt lại mật khẩu đến email của bạn.' });
   } catch (err) {
     console.error('FORGOT PASSWORD ERROR:', err.message);
     res.status(500).json({ message: 'Gửi email thất bại, vui lòng thử lại!' });
