@@ -1,7 +1,7 @@
 # Sneaker Shop - Hệ Thống Quản Lý Cửa Hàng Giày Sneaker (Advanced Business Web Development)
 Dự án này là một hệ thống đầy đủ bao gồm trang web mua sắm cho khách hàng (Client), tích hợp bảng điều khiển quản trị (Admin Dashboard), và hệ thống Backend API (Node.js + MongoDB).
 
-### 🛠️ Công nghệ sử dụng
+### Công nghệ sử dụng
 | Thành phần | Công nghệ |
 | :--- | :--- |
 | Backend | Node.js, Express 5, MongoDB (Mongoose) |
@@ -10,7 +10,7 @@ Dự án này là một hệ thống đầy đủ bao gồm trang web mua sắm 
 | Gửi email | Nodemailer (OTP, quên mật khẩu) |
 | Lưu trữ file | Multer |
 
-### 🌐 Địa chỉ truy cập
+### Địa chỉ truy cập
 
 🚀 Bản Deploy (Online)
 | Thành phần | URL |
@@ -23,7 +23,7 @@ Dự án này là một hệ thống đầy đủ bao gồm trang web mua sắm 
 | Ứng dụng | URL |
 | :--- | :--- |
 | Trang Client & Admin | http://localhost:4200 |
-| API Backend | http://localhost:3000 |
+| API Backend | http://localhost:4000 |
 
 ### 🔐 Tài khoản thử nghiệm (Admin)
 | Tên trường | Giá trị |
@@ -35,7 +35,7 @@ Dự án này là một hệ thống đầy đủ bao gồm trang web mua sắm 
 | Thư mục | Chức năng | Cổng hiển thị |
 | :--- | :--- | :--- |
 | my-app | Ứng dụng Frontend (Angular) bao gồm cả Client và giao diện Admin | 4200 |
-| my-server | Server Backend chính cung cấp API (Node.js/Express + MongoDB) | 3000 |
+| my-server | Server Backend chính cung cấp API (Node.js/Express + MongoDB) | 4000 |
 
 ---
 
@@ -58,7 +58,7 @@ npm start
 
 ---
 
-### 📚 Tổng hợp danh sách API (Tham khảo)
+### Tổng hợp danh sách API (Tham khảo)
 Base URL: https://sneaker-final-deploy.onrender.com
 
 Chú thích:
@@ -108,7 +108,7 @@ Toàn bộ yêu cầu giới hạn cho quyền quản trị viên.
 
 ---
 
-### 🧪 Hướng dẫn Test API bằng Postman
+### Hướng dẫn Test API bằng Postman
 Để kiểm tra các API yêu cầu xác thực (🔑 JWT hoặc 🔒 Admin), hãy làm theo các bước sau:
 
 1. Lấy Bearer Token:
@@ -130,17 +130,9 @@ Dán chuỗi Token vừa copy vào ô Token rồi ấn Send.
 
 ---
 
-### 🚨 Xử lý lỗi thường gặp
+### Xử lý lỗi thường gặp
 | Sự cố | Cách giải quyết |
 | :--- | :--- |
 | MongoDB connection failed | Đảm bảo MongoDB đã được bật (mongod hoặc Service) hoặc thông tin URI (process.env.MONGO_URI) trong file cấu hình .env Backend là chính xác. |
 | Port already in use | Nếu cổng 3000 hoặc 4200 bị dùng, tắt các Node process đang chạy ngầm trên máy bằng Task Manager. |
 | Lỗi không gửi được mail reset password | Kiểm tra lại các thông số biến môi trường (Ví dụ EMAIL_USER, EMAIL_PASS) có đang cung cấp đúng App Password của Gmail trong thư mục my-server hay không. |
-
-### 👥 Nhóm thực hiện
-| Vị trí | Nội dung điền |
-| :--- | :--- |
-| Tên nhóm / MSSV | [Điền thông tin nhóm của bạn] |
-| Thành viên 1 | [Tên thành viên] |
-| Thành viên 2 | [Tên thành viên] |
-| Học phần | Advanced Business Web Development |
